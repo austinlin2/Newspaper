@@ -28,6 +28,9 @@ export default async function SiteHeader() {
             {category}
           </Link>
         ))}
+        <Link href="/staff" className="hover:text-accent">
+          Staff
+        </Link>
         <span className="ml-auto flex items-center gap-4">
           {user ? (
             <>

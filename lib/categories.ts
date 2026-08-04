@@ -1,1 +1,1 @@
-export const CATEGORIES = ["News", "Sports", "Opinion", "Arts & Culture", "Features"];
+export const CATEGORIES = ["News", "Opinion"];
