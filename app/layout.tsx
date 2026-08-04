@@ -19,9 +19,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="flex min-h-full flex-col font-sans">
         <SiteHeader />
         <main className="flex-1">{children}</main>
-        <footer className="border-t border-line px-6 py-8 text-center text-xs text-muted">
-          © {new Date().getFullYear()} Alpha Newspaper — Alpha High School
-        </footer>
       </body>
     </html>
   );
