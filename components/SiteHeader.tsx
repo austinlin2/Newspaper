@@ -31,7 +31,7 @@ export default async function SiteHeader() {
         <Link href="/staff" className="hover:text-accent">
           Staff
         </Link>
-        <span className="ml-auto flex items-center gap-4">
+        <span className="flex items-center gap-4 border-l border-line pl-6">
           {user ? (
             <>
               {user.role === "admin" && (
