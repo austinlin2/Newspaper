@@ -19,14 +19,7 @@ export default async function PendingPage() {
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-10">
-      <div className="flex items-center justify-between">
-        <h1 className="font-serif text-3xl font-bold">Pending</h1>
-        {user?.role === "admin" && (
-          <Link href="/admin/writers" className="text-sm text-accent underline">
-            Manage writers
-          </Link>
-        )}
-      </div>
+      <h1 className="font-serif text-3xl font-bold">Pending</h1>
       <p className="mt-1 text-sm text-muted">
         New articles wait here for 2 hours before going live automatically. The writer can still
         edit or withdraw theirs during that window.

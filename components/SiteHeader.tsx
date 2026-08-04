@@ -39,6 +39,11 @@ export default async function SiteHeader() {
             <Link href="/pending" className="hover:text-accent">
               Pending
             </Link>
+            {user.role === "admin" && (
+              <Link href="/admin/writers" className="hover:text-accent">
+                Admin
+              </Link>
+            )}
             <Link href="/profile" className="hover:text-accent">
               Profile
             </Link>
