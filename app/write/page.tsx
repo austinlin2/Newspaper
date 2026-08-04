@@ -63,12 +63,14 @@ export default async function WriteDashboard() {
                 <Link href={`/write/${article.id}/edit`} className="text-accent underline">
                   Edit
                 </Link>
-                <form action={deleteArticle}>
-                  <input type="hidden" name="id" value={article.id} />
-                  <button type="submit" className="text-muted hover:text-accent">
-                    Delete
-                  </button>
-                </form>
+                {(article.status !== "published" || user?.role === "admin") && (
+                  <form action={deleteArticle}>
+                    <input type="hidden" name="id" value={article.id} />
+                    <button type="submit" className="text-muted hover:text-accent">
+                      Delete
+                    </button>
+                  </form>
+                )}
               </div>
             </div>
           ))}

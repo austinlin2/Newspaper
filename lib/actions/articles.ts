@@ -139,10 +139,13 @@ export async function deleteArticle(formData: FormData) {
   const session = await requireWriter();
   const id = Number(formData.get("id"));
 
-  const rows = await sql`SELECT author_id FROM articles WHERE id = ${id}`;
+  const rows = await sql`SELECT author_id, status FROM articles WHERE id = ${id}`;
   const article = rows[0];
   if (!article) return;
-  if (article.author_id !== session.userId && session.role !== "admin") {
+
+  if (article.status === "published") {
+    if (session.role !== "admin") throw new Error("Not authorized");
+  } else if (article.author_id !== session.userId && session.role !== "admin") {
     throw new Error("Not authorized");
   }
 
