@@ -12,9 +12,7 @@ export default async function StaffPage() {
         {staff.map((member) => (
           <div key={member.id} className="flex items-center justify-between gap-4 py-4">
             <p className="font-serif text-lg font-semibold">{member.name}</p>
-            <span className="text-xs font-semibold uppercase tracking-wide text-accent">
-              {member.role === "admin" ? "Editor" : "Staff Writer"}
-            </span>
+            <span className="text-xs font-semibold uppercase tracking-wide text-accent">Editor</span>
           </div>
         ))}
       </div>
