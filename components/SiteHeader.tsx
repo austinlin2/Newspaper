@@ -31,34 +31,23 @@ export default async function SiteHeader() {
         <Link href="/staff" className="hover:text-accent">
           Staff
         </Link>
-        <span className="flex items-center gap-4 border-l border-line pl-6">
-          {user ? (
-            <>
-              {user.role === "admin" && (
-                <Link href="/admin/articles" className="hover:text-accent">
-                  Admin
-                </Link>
-              )}
-              <Link href="/write" className="hover:text-accent">
-                Write
+        {user && (
+          <span className="flex items-center gap-4 border-l border-line pl-6">
+            {user.role === "admin" && (
+              <Link href="/admin/articles" className="hover:text-accent">
+                Admin
               </Link>
-              <form action={logout}>
-                <button type="submit" className="text-muted hover:text-accent">
-                  Log out
-                </button>
-              </form>
-            </>
-          ) : (
-            <>
-              <Link href="/login" className="hover:text-accent">
-                Log in
-              </Link>
-              <Link href="/signup" className="hover:text-accent">
-                Join as writer
-              </Link>
-            </>
-          )}
-        </span>
+            )}
+            <Link href="/write" className="hover:text-accent">
+              Write
+            </Link>
+            <form action={logout}>
+              <button type="submit" className="text-muted hover:text-accent">
+                Log out
+              </button>
+            </form>
+          </span>
+        )}
       </nav>
     </header>
   );

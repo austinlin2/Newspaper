@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { listApprovedWriters } from "@/lib/queries";
 
 export default async function StaffPage() {
@@ -5,7 +6,12 @@ export default async function StaffPage() {
 
   return (
     <div className="mx-auto max-w-2xl px-6 py-10">
-      <h1 className="font-serif text-3xl font-bold">Staff</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="font-serif text-3xl font-bold">Staff</h1>
+        <Link href="/login" className="text-sm text-accent underline">
+          Admin login
+        </Link>
+      </div>
       <p className="mt-1 text-sm text-muted">The people behind Alpha Newspaper.</p>
 
       <div className="mt-8 flex flex-col divide-y divide-line border-y border-line">
