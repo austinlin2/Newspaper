@@ -10,9 +10,12 @@ await sql`
     password_hash TEXT NOT NULL,
     role TEXT NOT NULL DEFAULT 'writer',
     status TEXT NOT NULL DEFAULT 'pending',
+    claimed BOOLEAN NOT NULL DEFAULT true,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
   )
 `;
+
+await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS claimed BOOLEAN NOT NULL DEFAULT true`;
 
 await sql`
   CREATE TABLE IF NOT EXISTS articles (

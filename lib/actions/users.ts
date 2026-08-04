@@ -44,6 +44,34 @@ export async function signup(formData: FormData) {
   redirect("/write");
 }
 
+export async function claimAccount(formData: FormData) {
+  const userId = Number(formData.get("userId"));
+  const password = String(formData.get("password") || "");
+  const confirmPassword = String(formData.get("confirmPassword") || "");
+
+  if (!userId) {
+    redirect("/signup?error=" + encodeURIComponent("Choose your name from the list."));
+  }
+  if (password.length < 8) {
+    redirect("/signup?error=" + encodeURIComponent("Password must be at least 8 characters."));
+  }
+  if (password !== confirmPassword) {
+    redirect("/signup?error=" + encodeURIComponent("Passwords don't match."));
+  }
+
+  const rows = await sql`SELECT id, role FROM users WHERE id = ${userId} AND claimed = false`;
+  const user = rows[0];
+  if (!user) {
+    redirect("/signup?error=" + encodeURIComponent("That account was already claimed. Refresh and try again."));
+  }
+
+  const passwordHash = await hashPassword(password);
+  await sql`UPDATE users SET password_hash = ${passwordHash}, claimed = true WHERE id = ${userId}`;
+
+  await createSession({ userId: user.id, role: user.role });
+  redirect("/write");
+}
+
 export async function login(formData: FormData) {
   const email = String(formData.get("email") || "").trim().toLowerCase();
   const password = String(formData.get("password") || "");

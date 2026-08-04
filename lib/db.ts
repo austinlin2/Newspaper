@@ -13,6 +13,7 @@ export type User = {
   password_hash: string;
   role: UserRole;
   status: UserStatus;
+  claimed: boolean;
   created_at: string;
 };
 
