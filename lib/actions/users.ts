@@ -82,3 +82,30 @@ export async function rejectWriter(formData: FormData) {
   await sql`DELETE FROM users WHERE id = ${userId} AND status = 'pending'`;
   revalidatePath("/admin/writers");
 }
+
+export async function changePassword(formData: FormData) {
+  const session = await getSession();
+  if (!session) redirect("/login");
+
+  const currentPassword = String(formData.get("currentPassword") || "");
+  const newPassword = String(formData.get("newPassword") || "");
+  const confirmPassword = String(formData.get("confirmPassword") || "");
+
+  if (newPassword.length < 8) {
+    redirect("/profile?error=" + encodeURIComponent("New password must be at least 8 characters."));
+  }
+  if (newPassword !== confirmPassword) {
+    redirect("/profile?error=" + encodeURIComponent("New passwords don't match."));
+  }
+
+  const rows = await sql`SELECT password_hash FROM users WHERE id = ${session.userId}`;
+  const user = rows[0];
+  if (!user || !(await verifyPassword(currentPassword, user.password_hash))) {
+    redirect("/profile?error=" + encodeURIComponent("Current password is incorrect."));
+  }
+
+  const newHash = await hashPassword(newPassword);
+  await sql`UPDATE users SET password_hash = ${newHash} WHERE id = ${session.userId}`;
+
+  redirect("/profile?success=" + encodeURIComponent("Password updated."));
+}

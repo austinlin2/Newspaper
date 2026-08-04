@@ -41,6 +41,9 @@ export default async function SiteHeader() {
             <Link href="/write" className="hover:text-accent">
               Write
             </Link>
+            <Link href="/profile" className="hover:text-accent">
+              Profile
+            </Link>
             <form action={logout}>
               <button type="submit" className="text-muted hover:text-accent">
                 Log out
