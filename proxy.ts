@@ -9,8 +9,9 @@ export async function proxy(request: NextRequest) {
   const isAdminRoute = pathname.startsWith("/admin");
   const isWriteRoute = pathname.startsWith("/write");
   const isProfileRoute = pathname.startsWith("/profile");
+  const isPendingRoute = pathname.startsWith("/pending");
 
-  if (!isAdminRoute && !isWriteRoute && !isProfileRoute) return NextResponse.next();
+  if (!isAdminRoute && !isWriteRoute && !isProfileRoute && !isPendingRoute) return NextResponse.next();
 
   const token = request.cookies.get("session")?.value;
   if (!token) {
@@ -29,5 +30,14 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/write", "/write/:path*", "/admin", "/admin/:path*", "/profile", "/profile/:path*"],
+  matcher: [
+    "/write",
+    "/write/:path*",
+    "/admin",
+    "/admin/:path*",
+    "/profile",
+    "/profile/:path*",
+    "/pending",
+    "/pending/:path*",
+  ],
 };

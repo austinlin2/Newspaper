@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth";
-import { listArticlesByAuthor } from "@/lib/queries";
+import { listArticlesByAuthor, PENDING_WINDOW_MS } from "@/lib/queries";
 import { deleteArticle } from "@/lib/actions/articles";
 
 function formatDate(dateString: string | null) {
@@ -10,6 +10,17 @@ function formatDate(dateString: string | null) {
     day: "numeric",
     year: "numeric",
   });
+}
+
+function statusLabel(status: string, submittedAt: string | null) {
+  if (status === "published") return "Published";
+  if (status === "draft") return "Draft";
+  if (!submittedAt) return "Pending";
+  const remainingMs = new Date(submittedAt).getTime() + PENDING_WINDOW_MS - Date.now();
+  if (remainingMs <= 0) return "Publishing shortly";
+  const hours = Math.floor(remainingMs / (60 * 60 * 1000));
+  const minutes = Math.floor((remainingMs % (60 * 60 * 1000)) / (60 * 1000));
+  return `Pending · ${hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`} left`;
 }
 
 export default async function WriteDashboard() {
@@ -43,7 +54,7 @@ export default async function WriteDashboard() {
                   <span
                     className={article.status === "published" ? "text-accent" : "text-muted"}
                   >
-                    {article.status === "published" ? "Published" : "Draft"}
+                    {statusLabel(article.status, article.submitted_at)}
                   </span>{" "}
                   · Updated {formatDate(article.updated_at)}
                 </p>

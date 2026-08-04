@@ -25,10 +25,13 @@ await sql`
     cover_image_url TEXT,
     author_id INTEGER NOT NULL REFERENCES users(id),
     status TEXT NOT NULL DEFAULT 'draft',
+    submitted_at TIMESTAMPTZ,
     published_at TIMESTAMPTZ,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
   )
 `;
+
+await sql`ALTER TABLE articles ADD COLUMN IF NOT EXISTS submitted_at TIMESTAMPTZ`;
 
 console.log("Tables ready.");

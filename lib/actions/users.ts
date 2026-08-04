@@ -41,7 +41,7 @@ export async function signup(formData: FormData) {
   }
 
   await createSession({ userId: user.id, role: user.role });
-  redirect("/admin/articles");
+  redirect("/write");
 }
 
 export async function login(formData: FormData) {
@@ -59,7 +59,7 @@ export async function login(formData: FormData) {
   }
 
   await createSession({ userId: user.id, role: user.role });
-  redirect(user.role === "admin" ? "/admin/articles" : "/write");
+  redirect("/write");
 }
 
 export async function logout() {

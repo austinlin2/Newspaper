@@ -33,13 +33,11 @@ export default async function SiteHeader() {
         </Link>
         {user && (
           <span className="flex items-center gap-4 border-l border-line pl-6">
-            {user.role === "admin" && (
-              <Link href="/admin/articles" className="hover:text-accent">
-                Admin
-              </Link>
-            )}
             <Link href="/write" className="hover:text-accent">
               Write
+            </Link>
+            <Link href="/pending" className="hover:text-accent">
+              Pending
             </Link>
             <Link href="/profile" className="hover:text-accent">
               Profile

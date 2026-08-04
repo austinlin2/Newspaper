@@ -4,7 +4,7 @@ export const sql = neon(process.env.DATABASE_URL!);
 
 export type UserRole = "admin" | "writer";
 export type UserStatus = "pending" | "approved";
-export type ArticleStatus = "draft" | "published";
+export type ArticleStatus = "draft" | "pending" | "published";
 
 export type User = {
   id: number;
@@ -26,6 +26,7 @@ export type Article = {
   cover_image_url: string | null;
   author_id: number;
   status: ArticleStatus;
+  submitted_at: string | null;
   published_at: string | null;
   created_at: string;
   updated_at: string;

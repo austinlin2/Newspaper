@@ -56,16 +56,16 @@ export async function createArticle(formData: FormData) {
 
   const coverImageUrl = await uploadCoverImage(formData.get("coverImage"));
   const slug = await uniqueSlug(slugify(title));
-  const status = intent === "publish" ? "published" : "draft";
-  const publishedAt = status === "published" ? new Date().toISOString() : null;
+  const status = intent === "pending" ? "pending" : "draft";
+  const submittedAt = status === "pending" ? new Date().toISOString() : null;
 
   await sql`
-    INSERT INTO articles (slug, title, excerpt, body, category, cover_image_url, author_id, status, published_at)
-    VALUES (${slug}, ${title}, ${excerpt}, ${body}, ${category}, ${coverImageUrl}, ${session.userId}, ${status}, ${publishedAt})
+    INSERT INTO articles (slug, title, excerpt, body, category, cover_image_url, author_id, status, submitted_at, published_at)
+    VALUES (${slug}, ${title}, ${excerpt}, ${body}, ${category}, ${coverImageUrl}, ${session.userId}, ${status}, ${submittedAt}, ${null})
   `;
 
   revalidatePath("/write");
-  revalidatePath("/");
+  revalidatePath("/pending");
   redirect("/write");
 }
 
@@ -93,22 +93,46 @@ export async function updateArticle(formData: FormData) {
   const uploadedUrl = await uploadCoverImage(formData.get("coverImage"));
   const coverImageUrl = uploadedUrl ?? article.cover_image_url;
 
-  const wasPublished = article.status === "published";
-  const status = intent === "publish" ? "published" : "draft";
-  const publishedAt = status === "published" ? (wasPublished ? article.published_at : new Date().toISOString()) : null;
+  // Already-published articles stay published on edit; otherwise the intent picks draft vs. submit-for-review.
+  const status = article.status === "published" ? "published" : intent === "pending" ? "pending" : "draft";
+  const publishedAt = status === "published" ? article.published_at : null;
+  // Only start (or restart) the 2-hour clock when freshly entering pending from a non-pending state.
+  const submittedAt =
+    status === "pending" ? (article.status === "pending" ? article.submitted_at : new Date().toISOString()) : null;
 
   await sql`
     UPDATE articles
     SET title = ${title}, excerpt = ${excerpt}, body = ${body}, category = ${category},
-        cover_image_url = ${coverImageUrl}, status = ${status}, published_at = ${publishedAt},
-        updated_at = now()
+        cover_image_url = ${coverImageUrl}, status = ${status}, submitted_at = ${submittedAt},
+        published_at = ${publishedAt}, updated_at = now()
     WHERE id = ${id}
   `;
 
   revalidatePath("/write");
+  revalidatePath("/pending");
   revalidatePath("/");
   revalidatePath(`/article/${article.slug}`);
   redirect("/write");
+}
+
+export async function sendBackToDraft(formData: FormData) {
+  const session = await requireWriter();
+  const id = Number(formData.get("id"));
+
+  const rows = await sql`SELECT author_id FROM articles WHERE id = ${id}`;
+  const article = rows[0];
+  if (!article) return;
+  if (article.author_id !== session.userId && session.role !== "admin") {
+    throw new Error("Not authorized");
+  }
+
+  await sql`
+    UPDATE articles SET status = 'draft', submitted_at = NULL, updated_at = now()
+    WHERE id = ${id} AND status = 'pending'
+  `;
+
+  revalidatePath("/pending");
+  revalidatePath("/write");
 }
 
 export async function deleteArticle(formData: FormData) {

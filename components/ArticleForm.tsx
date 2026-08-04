@@ -82,24 +82,37 @@ export default function ArticleForm({
         />
       </label>
 
-      <div className="flex gap-3">
-        <button
-          type="submit"
-          name="intent"
-          value="draft"
-          className="rounded-md border border-line px-4 py-2 font-medium hover:border-accent"
-        >
-          Save draft
-        </button>
-        <button
-          type="submit"
-          name="intent"
-          value="publish"
-          className="rounded-md bg-accent px-4 py-2 font-medium text-white hover:opacity-90"
-        >
-          Publish
-        </button>
-      </div>
+      {article?.status === "published" ? (
+        <div className="flex gap-3">
+          <button
+            type="submit"
+            name="intent"
+            value="draft"
+            className="rounded-md bg-accent px-4 py-2 font-medium text-white hover:opacity-90"
+          >
+            Save changes
+          </button>
+        </div>
+      ) : (
+        <div className="flex gap-3">
+          <button
+            type="submit"
+            name="intent"
+            value="draft"
+            className="rounded-md border border-line px-4 py-2 font-medium hover:border-accent"
+          >
+            Save draft
+          </button>
+          <button
+            type="submit"
+            name="intent"
+            value="pending"
+            className="rounded-md bg-accent px-4 py-2 font-medium text-white hover:opacity-90"
+          >
+            Submit — goes live in 2 hours
+          </button>
+        </div>
+      )}
     </form>
   );
 }
