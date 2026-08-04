@@ -76,3 +76,10 @@ export async function listUnclaimedWriters(): Promise<User[]> {
   const rows = await sql`SELECT * FROM users WHERE claimed = false ORDER BY name ASC`;
   return rows as User[];
 }
+
+export async function listLoginCandidates(): Promise<User[]> {
+  const rows = await sql`
+    SELECT * FROM users WHERE claimed = true AND status = 'approved' ORDER BY name ASC
+  `;
+  return rows as User[];
+}

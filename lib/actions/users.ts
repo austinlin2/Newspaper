@@ -73,14 +73,14 @@ export async function claimAccount(formData: FormData) {
 }
 
 export async function login(formData: FormData) {
-  const email = String(formData.get("email") || "").trim().toLowerCase();
+  const userId = Number(formData.get("userId"));
   const password = String(formData.get("password") || "");
 
-  const rows = await sql`SELECT id, role, status, password_hash FROM users WHERE email = ${email}`;
+  const rows = await sql`SELECT id, role, status, password_hash FROM users WHERE id = ${userId}`;
   const user = rows[0];
 
   if (!user || !(await verifyPassword(password, user.password_hash))) {
-    redirect("/login?error=" + encodeURIComponent("Invalid email or password."));
+    redirect("/login?error=" + encodeURIComponent("Wrong password."));
   }
   if (user.status !== "approved") {
     redirect("/login?error=" + encodeURIComponent("Your account is awaiting admin approval."));
