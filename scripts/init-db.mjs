@@ -6,7 +6,7 @@ await sql`
   CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
-    email TEXT UNIQUE NOT NULL,
+    email TEXT UNIQUE,
     password_hash TEXT NOT NULL,
     role TEXT NOT NULL DEFAULT 'writer',
     status TEXT NOT NULL DEFAULT 'pending',
@@ -16,6 +16,8 @@ await sql`
 `;
 
 await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS claimed BOOLEAN NOT NULL DEFAULT true`;
+await sql`ALTER TABLE users ALTER COLUMN email DROP NOT NULL`;
+await sql`UPDATE users SET email = NULL WHERE claimed = false`;
 
 await sql`
   CREATE TABLE IF NOT EXISTS articles (

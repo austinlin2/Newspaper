@@ -15,9 +15,8 @@ export default async function SignupPage({
     <div className="mx-auto max-w-sm px-6 py-16">
       <h1 className="font-serif text-3xl font-bold">Join as a writer</h1>
       <p className="mt-1 text-sm text-muted">
-        {showClaimForm
-          ? "Pick your name and set a password to activate your account."
-          : "New accounts need admin approval before you can log in."}
+        Pick your name and set a password. A site admin still needs to approve you before you can
+        log in.
       </p>
 
       {error && (
@@ -71,7 +70,7 @@ export default async function SignupPage({
               type="submit"
               className="mt-2 rounded-md bg-accent px-4 py-2 font-medium text-white transition-opacity hover:opacity-90"
             >
-              Activate account
+              Request account
             </button>
           </form>
 

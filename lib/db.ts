@@ -9,7 +9,7 @@ export type ArticleStatus = "draft" | "pending" | "published";
 export type User = {
   id: number;
   name: string;
-  email: string;
+  email: string | null;
   password_hash: string;
   role: UserRole;
   status: UserStatus;

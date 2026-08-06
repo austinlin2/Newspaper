@@ -34,9 +34,14 @@ export default async function PendingPage() {
             return (
               <div key={article.id} className="flex items-center justify-between gap-4 py-4">
                 <div>
-                  <p className="font-serif text-lg font-semibold">{article.title}</p>
+                  <Link
+                    href={`/article/${article.slug}`}
+                    className="font-serif text-lg font-semibold hover:text-accent"
+                  >
+                    {article.title}
+                  </Link>
                   <p className="text-xs text-muted">
-                    {article.category} · By {article.author_name} ·{" "}
+                    {article.category} · {article.author_name} ·{" "}
                     <span className="font-medium text-accent">{formatTimeLeft(article.submitted_at)}</span>
                   </p>
                 </div>

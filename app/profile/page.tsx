@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth";
-import { changePassword } from "@/lib/actions/users";
+import { changePassword, logout } from "@/lib/actions/users";
 
 export default async function ProfilePage({
   searchParams,
@@ -16,7 +16,8 @@ export default async function ProfilePage({
     <div className="mx-auto max-w-sm px-6 py-16">
       <h1 className="font-serif text-3xl font-bold">Profile</h1>
       <p className="mt-1 text-sm text-muted">
-        Signed in as {user.name} ({user.email})
+        Signed in as {user.name}
+        {user.email && ` (${user.email})`}
       </p>
 
       <h2 className="mt-8 font-serif text-xl font-bold">Change password</h2>
@@ -65,6 +66,12 @@ export default async function ProfilePage({
           className="mt-2 rounded-md bg-accent px-4 py-2 font-medium text-white transition-opacity hover:opacity-90"
         >
           Update password
+        </button>
+      </form>
+
+      <form action={logout} className="mt-8 border-t border-line pt-6">
+        <button type="submit" className="text-sm text-muted underline hover:text-accent">
+          Log out
         </button>
       </form>
     </div>

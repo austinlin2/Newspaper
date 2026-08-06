@@ -29,7 +29,7 @@ export default async function AdminWritersPage() {
                 <div>
                   <p className="font-medium">{writer.name}</p>
                   <p className="text-xs text-muted">
-                    {writer.email} · requested {formatDate(writer.created_at)}
+                    {writer.email && `${writer.email} · `}requested {formatDate(writer.created_at)}
                   </p>
                 </div>
                 <div className="flex shrink-0 gap-3 text-sm">
@@ -63,7 +63,7 @@ export default async function AdminWritersPage() {
                 <p className="font-medium">
                   {writer.name} {writer.role === "admin" && <span className="text-xs text-accent">Admin</span>}
                 </p>
-                <p className="text-xs text-muted">{writer.email}</p>
+                {writer.email && <p className="text-xs text-muted">{writer.email}</p>}
               </div>
             </div>
           ))}

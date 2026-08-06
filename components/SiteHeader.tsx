@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth";
-import { logout } from "@/lib/actions/users";
 import { CATEGORIES } from "@/lib/categories";
 
 export default async function SiteHeader() {
@@ -47,11 +46,6 @@ export default async function SiteHeader() {
                 Admin
               </Link>
             )}
-            <form action={logout}>
-              <button type="submit" className="text-muted hover:text-accent">
-                Log out
-              </button>
-            </form>
           </span>
         )}
       </nav>

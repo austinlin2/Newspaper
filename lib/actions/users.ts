@@ -66,10 +66,14 @@ export async function claimAccount(formData: FormData) {
   }
 
   const passwordHash = await hashPassword(password);
-  await sql`UPDATE users SET password_hash = ${passwordHash}, claimed = true WHERE id = ${userId}`;
+  await sql`
+    UPDATE users SET password_hash = ${passwordHash}, claimed = true, status = 'pending' WHERE id = ${userId}
+  `;
 
-  await createSession({ userId: user.id, role: user.role });
-  redirect("/write");
+  redirect(
+    "/login?success=" +
+      encodeURIComponent("Account created! A site admin needs to approve you before you can log in.")
+  );
 }
 
 export async function login(formData: FormData) {
